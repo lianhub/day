@@ -1,6 +1,6 @@
 # Redaktilo
 
-jerery-Redaktilo allows you to find, insert, replace and remove lines using an editor-like object.
+v1-Redaktilo allows you to find, insert, replace and remove lines using an editor-like object.
 
 *Because your code too needs an editor to manipulate files*.
 

@@ -76,84 +76,59 @@
 
                 
                 <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-                    <h1 id="redaktilo">Redaktilo</h1>
-<p>v6-Redaktilo allows you to find, insert, replace and remove lines using an editor-like object.</p>
-<p><em>Because your code too needs an editor to manipulate files</em>.</p>
-<p><a href="https://insight.sensiolabs.com/projects/fbe2d89f-f64d-45c2-a680-bbafac4b0d08"><img src="https://insight.sensiolabs.com/projects/fbe2d89f-f64d-45c2-a680-bbafac4b0d08/mini.png" alt="SensioLabsInsight" /></a>
-<a href="https://travis-ci.org/gnugat/redaktilo"><img src="https://travis-ci.org/gnugat/redaktilo.png" alt="Travis CI" /></a></p>
-<h2 id="getting-started">Getting started</h2>
-<p>Use <a href="http://getcomposer.org/">Composer</a> to install Redaktilo in your projects:</p>
-<pre><code>composer require "gnugat/redaktilo:^1.0"</code></pre>
-<p>Redaktilo provides an <code>Editor</code> class which can be instanciated using
-<code>EditorFactory</code>:</p>
-<pre><code class="language-php">&lt;?php
-require_once __DIR__.'/vendor/autoload.php';
-
-use Gnugat\Redaktilo\EditorFactory;
-
-$editor = EditorFactory::createEditor();</code></pre>
-<h2 id="real-life-example">Real life example</h2>
-<p>For our example, we will create a <a href="https://github.com/sensiolabs/SensioGeneratorBundle/blob/8b7a33aa3d22388443b6de0b0cf184122e9f60d2/Manipulator/KernelManipulator.php"><code>KernelManipulator</code></a>
-similar to the one we can find in <a href="https://github.com/sensiolabs/SensioGeneratorBundle">SensioGeneratorBundle</a>.</p>
-<p>It takes a bundle's fully qualified classname and inserts it in the <code>AppKernel</code>
-file:</p>
-<pre><code class="language-php">&lt;?php
-
-namespace Sensio\Bundle\GeneratorBundle\Manipulator;
-
-use Gnugat\Redaktilo\Editor;
-
-class KernelManipulator extends Manipulator
-{
-    protected $editor;
-    protected $appKernelFilename;
-
-    public function __construct(Editor $editor, $appKernelFilename)
-    {
-        $this-&gt;editor = $editor;
-        $this-&gt;appKernelFilename = $appKernelFilename;
-    }
-
-    public function addBundle($bundle)
-    {
-        $appKernel = $this-&gt;editor-&gt;open($this-&gt;appKernelFilename);
-        $newBundle = "            new $bundle(),";
-        if ($this-&gt;editor-&gt;hasBelow($appKernel, $newBundle)) {
-            $message = sprintf('Bundle "%s" is already defined in "AppKernel::registerBundles()".', $bundle);
-
-            throw new \RuntimeException($message);
-        }
-        $this-&gt;editor-&gt;jumpBelow($appKernel, '        );');
-        $this-&gt;editor-&gt;insertAbove($appKernel, $newBundle);
-        $this-&gt;editor-&gt;save($appKernel);
-
-        return true;
-    }
-}</code></pre>
-<p>As you can see it's easier to read and to understand than
-<a href="https://github.com/sensiolabs/SensioGeneratorBundle/blob/8b7a33aa3d22388443b6de0b0cf184122e9f60d2/Manipulator/KernelManipulator.php">the original PHP token parsing</a>.</p>
-<h2 id="further-documentation">Further documentation</h2>
-<p>You can see the current and past versions using one of the following:</p>
+                    <h1 id="use-cases">Use cases</h1>
+<p>Redaktilo has been created to meet some actual needs, which is why its
+Test Suite contains an Example section.</p>
+<p>Let's discover the use cases which led to the creation of Redaktilo:</p>
 <ul>
-<li>the <code>git tag</code> command</li>
-<li>the <a href="https://github.com/gnugat/redaktilo/releases">releases page on Github</a></li>
-<li>the file listing the <a href="changelog.html">changes between versions</a></li>
+<li><a href="#yaml-configuration-edition">YAML configuration edition</a></li>
+<li><a href="#json-file-edition">JSON file edition</a></li>
+<li><a href="#php-source-code-edition">PHP source code edition</a></li>
+<li><a href="#next-readings">Next readings</a></li>
+<li><a href="#previous-readings">Previous readings</a></li>
 </ul>
-<p>You can find more documentation at the following links:</p>
+<h2 id="yaml-configuration-edition">YAML configuration edition</h2>
+<p>Many projects use the YAML format in their configuration files.</p>
+<p>If you need to add a new parameter, you could use the
+<a href="http://symfony.com/doc/current/components/yaml/index.html">Symfony2 YAML component</a>,
+which is a small library allowing you to convert a YAML file to a PHP array and
+vis-versa.</p>
+<p>The only problem with it: it doesn't keep comments or empty lines.</p>
+<p>Redaktilo fits perfectly for the job.</p>
+<blockquote>
+<p><strong>Note</strong>: see <code>BundleRoutingTest</code> for an actual implementation.</p>
+</blockquote>
+<h2 id="json-file-edition">JSON file edition</h2>
+<p>Some projects use JSON files (like <a href="https://getcomposer.org/">Composer</a>).</p>
+<p>Just like with Symfony2 YAML component, you could use <code>json_encode</code> and
+<code>json_decode</code> to edit these files, but you would lose empty lines and custom
+indentation.</p>
+<p>Redaktilo is again a good candidate.</p>
+<h2 id="php-source-code-edition">PHP source code edition</h2>
+<p><a href="https://github.com/gnugat/GnugatWizardBundle">GnugatWizardBundle</a> automatically
+registers bundle installed using composer in a Symfony2 application.</p>
+<p>To do so, it edits the <code>app/AppKernel.php</code> file using
+<a href="https://github.com/sensiolabs/SensioGeneratorBundle">SensioGeneratorBundle</a>'s
+<a href="https://github.com/sensiolabs/SensioGeneratorBundle/blob/8b7a33aa3d22388443b6de0b0cf184122e9f60d2/Manipulator/KernelManipulator.php">KernelManipulator</a>.</p>
+<p>This class is a little over engineered as it parses PHP tokens, and doesn't
+allow to register bundle for a special environment, meaning that
+GnugatWizardBundle will need to create its own KernelManipulator.</p>
+<p>The result of a simpler approach (parsing lines instead of PHP tokens) is
+Redaktilo!</p>
+<blockquote>
+<p><strong>Note</strong>: see <code>BundleRegistrationTest</code> for an actual implementation.</p>
+</blockquote>
+<h2 id="next-readings">Next readings</h2>
 <ul>
-<li><a href="LICENSE">copyright and MIT license</a></li>
-<li><a href="versioning.html">versioning and branching models</a></li>
-<li><a href="contributing.html">contribution instructions</a></li>
-<li><a href="upgrade-2.0.html">migration to 2.0 instructions</a></li>
+<li><a href="03-reference.html">Reference</a></li>
+<li><a href="04-vocabulary.html">Vocabulary</a></li>
+<li><a href="05-extending.html">Extending</a></li>
+<li><a href="06-exceptions.html">Exceptions</a></li>
 </ul>
-<p>Next readings:</p>
+<h2 id="previous-readings">Previous readings</h2>
 <ul>
-<li><a href="doc/01-tutorial.html">Tutorial</a></li>
-<li><a href="doc/02-use-cases.html">Use cases</a></li>
-<li><a href="doc/03-reference.html">Reference</a></li>
-<li><a href="doc/04-vocabulary.html">Vocabulary</a></li>
-<li><a href="doc/05-extending.html">Extending</a></li>
-<li><a href="doc/06-exceptions.html">Exceptions</a></li>
+<li><a href="../index.html">README</a></li>
+<li><a href="01-tutorial.html">Tutorial</a></li>
 </ul>
                 </section>
 

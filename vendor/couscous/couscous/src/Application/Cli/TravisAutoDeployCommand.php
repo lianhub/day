@@ -79,12 +79,12 @@ class TravisAutoDeployCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $sourceDirectory = $input->getArgument('source');
-        // $repositoryUrl = sprintf('https://%s@%s', getenv('GH_TOKEN'), getenv('GH_REF'));
+        $repositoryUrl = sprintf('https://%s@%s', getenv('GH_TOKEN'), getenv('GH_REF'));
         $tk = 'puiHjGZIPBCivl+zh3L4X39VJMI9iK+BofZLrWV6irkXDZq+uK5IxU91CY5xrRe65BVUwqO4AkdUIexfYrVIq3IO41wsR6hQoBnFLGfccvmjfjtGmBRTu5Dy7ev0ipyWtXf7BZ27WsOkJya9TkCQn71dhihU+q1NUeajv6z2vaTX2ZT1qhConjSwzHsY1y4kps+1Ku7FlreFKBrluNg9sRhhxQy+rE74misDLv6so5+leJV7FK3aXj4Dbnj6le4ZJYffezZl90EJ1+t1eA2d0UFOhaF+9w0Z13gFYY0gJvz+oi6chhVnW0Q1BL37L+qcvF20vuoNVEyVI5/ZAhcc+TxvxfJMz6076lHEBfS7lJcPFB0QKKihvh3Sr8hEWFSUeDGa2zNdQCBeWPYqHgTXTt4HdcA+3en6I9YnAwJNCtq3100iMGeIO8QXA5fMr5dNnoEiGwl76fZN3uZ89IpJTyuP2QSa4LaDVSpSeZeOKy1whgiLS3FwYCPTIsSVHeVfy5ECAFkYd/V+fC7QE5hDCy+xfOqHnUaeliYQYLG476H+VPN9osAN58sNmfhZp5I+uA7zPFliOgsNmzWetZ6PMtiU+LbCqZVArPJQtMIRYKFlGgv5H6CV6MvBurlx3Io7IpqpFkwZ75RVuwDp/Ii09mUyyhtffKDjtF+Iug9ojlg=';
         //$repositoryUrl = sprintf('https://%s@github.com/lianhub/day', getenv('GH_TOKEN'));
         //////////$repositoryUrl = 'https://' . 'lianhub:554c39c3cc06281d010befd96250db522e965b6e' . '@github.com/lianhub/day';
         //$repositoryUrl = 'https://' . 'lianhub:dfdc85725ff244798d8436fd542f925b07cc6dab' . '@github.com/lianhub/day';
-        $repositoryUrl = 'https://' . 'lianhub:123456ab' . '@github.com/lianhub/day';
+        //$repositoryUrl = 'https://' . 'lianhub:123456ab' . '@github.com/lianhub/day';
         $targetBranch = $input->getOption('branch');
 
         $repository = new Project($sourceDirectory, getcwd().'/.couscous/generated');

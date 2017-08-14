@@ -79,7 +79,8 @@ class TravisAutoDeployCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $sourceDirectory = $input->getArgument('source');
-        $repositoryUrl = sprintf('https://%s@%s', getenv('GH_TOKEN'), getenv('GH_REF'));
+        // $repositoryUrl = sprintf('https://%s@%s', getenv('GH_TOKEN'), getenv('GH_REF'));
+        $repositoryUrl = sprintf('https://%s@github.com/lianhub', getenv('GH_TOKEN'));
         $targetBranch = $input->getOption('branch');
 
         $repository = new Project($sourceDirectory, getcwd().'/.couscous/generated');

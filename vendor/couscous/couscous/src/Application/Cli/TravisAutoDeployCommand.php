@@ -114,8 +114,6 @@ class TravisAutoDeployCommand extends Command
         $output->writeln('<info>Setting up git user</info>');
         $this->commandRunner->run('git config --global user.name "${GIT_NAME}"');
         $this->commandRunner->run('git config --global user.email "${GIT_EMAIL}"');
-        //$this->commandRunner->run('git config --global user.name "jerry"');
-        //$this->commandRunner->run('git config --global user.email "jerry@abc.com"');
 
         // Generate the website
         $this->generator->generate($repository, $output);

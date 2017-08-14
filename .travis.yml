@@ -6,7 +6,7 @@ env:
   - "..."
   global:
   - GIT_NAME: "'Jerry auto deploy'"
-  - GIT_EMAIL: jerry@abcd.com
+  - GIT_EMAIL: jerry@nonnon.com
   - GH_REF: github.com/lianhub/day
   - secure: W4YzVGDK1ucblTnAGI/5DiRkxeZ2M6dKygUNPdq/cvQ/MPEWClnG3RdtAiy1O1OgAKM/1LUX/+UCDPdIntAKGBQUgcZI/SRkgoXsKiGJnd4KTIz3KXU5sntUpE8+ly4K2sQLXy0OsOBi7y1lnbspxlrKyocliwPvri7sEPUI49gz7U0Ol8xRWDG7RjnZK2mPwVAcljwn38UvtCV57xDnL2yQO7gRxMi6rdCmCXd3zC6n5bAa+Q3QZn4czbiB/ywxGjx6d+B5Ft1KTlsoADQcP2IsVlzNHPrdMP/VxCZh1lBV5wdraPWCPAWMLvc1HmZ2iIy582V5KfQ4HosfDLghxffJiU0me8TlLWaqmwAakLQxXQK1CxYDMtttlZ/mldW4DVLyTsF4CDpyHnoJRcr2crynFJ+Nl8yZwAzjWG0KUCNKFd/dIPTdW7XJvgCtRb6gVoaZrk+btZjtpcw9Z7MM8xXWdA7LHRrI8GESD9m4pVUFRpfjRj4+J92te8XAn0NoUWdMb5Ae1b+tElDVriha5DxPvCZY/vj0sFx7XQbpCeng0HnZr5VlgRCUwbAWytJ3HsPd1RFrcGPvcTkzeNPYrcCxeSWFohhPI9lY8x/hEfUGmyzUEa2C4/2FWKA2K7k9hl6C9eJqfAFV2iuiQDwfUYogtk+uOM1JTek9g5oTAVM=
 before_script:

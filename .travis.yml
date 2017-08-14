@@ -12,4 +12,4 @@ env:
 before_script:
 - composer install --no-progress
 script:
-- vendor/bin/couscous travis-auto-deploy --php-version=7.0
+- php couscous.phar travis-auto-deploy --php-version=7.0

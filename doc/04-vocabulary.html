@@ -81,84 +81,88 @@
                         <div class="wy-nav-content">
                 <div class="rst-content">
                     <div role="main" class="document">
-                        <h1 id="redaktilo">Redaktilo</h1>
-<p>v15-Redaktilo allows you to find, insert, replace and remove lines using an editor-like object.</p>
-<p><em>Because your code too needs an editor to manipulate files</em>.</p>
-<p><a href="https://insight.sensiolabs.com/projects/fbe2d89f-f64d-45c2-a680-bbafac4b0d08"><img src="https://insight.sensiolabs.com/projects/fbe2d89f-f64d-45c2-a680-bbafac4b0d08/mini.png" alt="SensioLabsInsight" /></a>
-<a href="https://travis-ci.org/gnugat/redaktilo"><img src="https://travis-ci.org/gnugat/redaktilo.png" alt="Travis CI" /></a></p>
-<h2 id="getting-started">Getting started</h2>
-<p>Use <a href="http://getcomposer.org/">Composer</a> to install Redaktilo in your projects:</p>
-<pre><code>composer require "gnugat/redaktilo:^1.0"</code></pre>
-<p>Redaktilo provides an <code>Editor</code> class which can be instanciated using
-<code>EditorFactory</code>:</p>
-<pre><code class="language-php">&lt;?php
-require_once __DIR__.'/vendor/autoload.php';
-
-use Gnugat\Redaktilo\EditorFactory;
-
-$editor = EditorFactory::createEditor();</code></pre>
-<h2 id="real-life-example">Real life example</h2>
-<p>For our example, we will create a <a href="https://github.com/sensiolabs/SensioGeneratorBundle/blob/8b7a33aa3d22388443b6de0b0cf184122e9f60d2/Manipulator/KernelManipulator.php"><code>KernelManipulator</code></a>
-similar to the one we can find in <a href="https://github.com/sensiolabs/SensioGeneratorBundle">SensioGeneratorBundle</a>.</p>
-<p>It takes a bundle's fully qualified classname and inserts it in the <code>AppKernel</code>
-file:</p>
-<pre><code class="language-php">&lt;?php
-
-namespace Sensio\Bundle\GeneratorBundle\Manipulator;
-
-use Gnugat\Redaktilo\Editor;
-
-class KernelManipulator extends Manipulator
-{
-    protected $editor;
-    protected $appKernelFilename;
-
-    public function __construct(Editor $editor, $appKernelFilename)
-    {
-        $this-&gt;editor = $editor;
-        $this-&gt;appKernelFilename = $appKernelFilename;
-    }
-
-    public function addBundle($bundle)
-    {
-        $appKernel = $this-&gt;editor-&gt;open($this-&gt;appKernelFilename);
-        $newBundle = "            new $bundle(),";
-        if ($this-&gt;editor-&gt;hasBelow($appKernel, $newBundle)) {
-            $message = sprintf('Bundle "%s" is already defined in "AppKernel::registerBundles()".', $bundle);
-
-            throw new \RuntimeException($message);
-        }
-        $this-&gt;editor-&gt;jumpBelow($appKernel, '        );');
-        $this-&gt;editor-&gt;insertAbove($appKernel, $newBundle);
-        $this-&gt;editor-&gt;save($appKernel);
-
-        return true;
-    }
-}</code></pre>
-<p>As you can see it's easier to read and to understand than
-<a href="https://github.com/sensiolabs/SensioGeneratorBundle/blob/8b7a33aa3d22388443b6de0b0cf184122e9f60d2/Manipulator/KernelManipulator.php">the original PHP token parsing</a>.</p>
-<h2 id="further-documentation">Further documentation</h2>
-<p>You can see the current and past versions using one of the following:</p>
+                        <h1 id="vocabulary">Vocabulary</h1>
 <ul>
-<li>the <code>git tag</code> command</li>
-<li>the <a href="https://github.com/gnugat/redaktilo/releases">releases page on Github</a></li>
-<li>the file listing the <a href="changelog.html">changes between versions</a></li>
+<li><a href="#actions">Actions</a>
+<ul>
+<li><a href="#insert">insert</a></li>
+<li><a href="#remove">remove</a></li>
+<li><a href="#replace">replace</a></li>
+</ul></li>
+<li><a href="#cursor">Cursor</a></li>
+<li><a href="#directions">Directions</a>
+<ul>
+<li><a href="#above">above</a></li>
+<li><a href="#below">below</a></li>
+</ul></li>
+<li><a href="#editor">Editor</a></li>
+<li><a href="#file">File</a></li>
+<li><a href="#line">Line</a></li>
+<li><a href="#location">Location</a></li>
+<li><a href="#redaktilo">Redaktilo</a></li>
+<li><a href="#text">Text</a></li>
 </ul>
-<p>You can find more documentation at the following links:</p>
+<h2 id="actions">Actions</h2>
+<p>Here's the vocabulary for the possible actions on a line.</p>
+<h3 id="insert">insert</h3>
+<p>Should be prefered over the word <code>add</code>.</p>
+<h3 id="remove">remove</h3>
+<p>Should be prefered over the word <code>delete</code>.</p>
+<h3 id="replace">replace</h3>
+<p>Should be prefered over the word <code>change</code>.</p>
+<h2 id="cursor">Cursor</h2>
+<p>Also used to mean the current line.</p>
+<p>An indicator used to know the position in the text.</p>
+<p>This is useful when a pattern occurs many times in the text: it enables the
+editor to select the wanted one.</p>
+<p>The cursor also enables to manipulate the selected element.</p>
+<h2 id="directions">Directions</h2>
+<p>Here's the vocabulary to locate something relatively in a collection of lines.</p>
+<h3 id="above">above</h3>
+<p>Should be prefered over the words <code>over</code>, <code>before</code>, <code>previous</code> or <code>up</code>.</p>
+<h3 id="below">below</h3>
+<p>Should be prefered over the words <code>under</code>, <code>after</code>, <code>next</code> or <code>down</code>.</p>
+<h2 id="editor">Editor</h2>
+<p>Also called &quot;text editor&quot;.</p>
+<p>A piece of software which is able to change the content of a text.
+In the case of Redaktilo, the editor is an object provided by a library.</p>
+<h2 id="file">File</h2>
+<p>Also called &quot;text file&quot;, to be opposed to &quot;binary file&quot;.</p>
+<p>See <a href="#text">Text</a>.</p>
+<h2 id="line">Line</h2>
+<p>The unit with which <strong>Redaktilo</strong> works. It's a simple string which ends at the
+line break:</p>
 <ul>
-<li><a href="LICENSE">copyright and MIT license</a></li>
-<li><a href="versioning.html">versioning and branching models</a></li>
-<li><a href="contributing.html">contribution instructions</a></li>
-<li><a href="upgrade-2.0.html">migration to 2.0 instructions</a></li>
+<li><code>\r\n</code> for texts created on Windows</li>
+<li><code>\n</code> for texts created on the other operating systems</li>
 </ul>
-<p>Next readings:</p>
+<p>To make it easier for the developers, <strong>Redaktilo</strong> takes care of the line
+break, so you should only provide it with a string stripped of it.</p>
+<h2 id="location">Location</h2>
+<p>The given line number, to which you can relatively search or do something.</p>
+<h2 id="redaktilo">Redaktilo</h2>
+<p>This means <code>editor</code> in esperanto. Technically <code>Tekstoredaktilo</code> should have been
+used (<code>text editor</code>), but it was a bit too long for a project name.</p>
+<h2 id="text">Text</h2>
+<p>Can contain:</p>
 <ul>
-<li><a href="doc/01-tutorial.html">Tutorial</a></li>
-<li><a href="doc/02-use-cases.html">Use cases</a></li>
-<li><a href="doc/03-reference.html">Reference</a></li>
-<li><a href="doc/04-vocabulary.html">Vocabulary</a></li>
-<li><a href="doc/05-extending.html">Extending</a></li>
-<li><a href="doc/06-exceptions.html">Exceptions</a></li>
+<li>plain text</li>
+<li>JSON</li>
+<li>YAML</li>
+<li>PHP</li>
+<li>etc...</li>
+</ul>
+<h2 id="next-readings">Next readings</h2>
+<ul>
+<li><a href="05-extending.html">Extending</a></li>
+<li><a href="06-exceptions.html">Exceptions</a></li>
+</ul>
+<h2 id="previous-readings">Previous readings</h2>
+<ul>
+<li><a href="../index.html">README</a></li>
+<li><a href="01-tutorial.html">Tutorial</a></li>
+<li><a href="02-use-cases.html">Use cases</a></li>
+<li><a href="03-reference.html">Reference</a></li>
 </ul>
                     </div>
 

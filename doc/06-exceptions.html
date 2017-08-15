@@ -81,84 +81,116 @@
                         <div class="wy-nav-content">
                 <div class="rst-content">
                     <div role="main" class="document">
-                        <h1 id="redaktilo">Redaktilo</h1>
-<p>v15-Redaktilo allows you to find, insert, replace and remove lines using an editor-like object.</p>
-<p><em>Because your code too needs an editor to manipulate files</em>.</p>
-<p><a href="https://insight.sensiolabs.com/projects/fbe2d89f-f64d-45c2-a680-bbafac4b0d08"><img src="https://insight.sensiolabs.com/projects/fbe2d89f-f64d-45c2-a680-bbafac4b0d08/mini.png" alt="SensioLabsInsight" /></a>
-<a href="https://travis-ci.org/gnugat/redaktilo"><img src="https://travis-ci.org/gnugat/redaktilo.png" alt="Travis CI" /></a></p>
-<h2 id="getting-started">Getting started</h2>
-<p>Use <a href="http://getcomposer.org/">Composer</a> to install Redaktilo in your projects:</p>
-<pre><code>composer require "gnugat/redaktilo:^1.0"</code></pre>
-<p>Redaktilo provides an <code>Editor</code> class which can be instanciated using
-<code>EditorFactory</code>:</p>
-<pre><code class="language-php">&lt;?php
-require_once __DIR__.'/vendor/autoload.php';
-
-use Gnugat\Redaktilo\EditorFactory;
-
-$editor = EditorFactory::createEditor();</code></pre>
-<h2 id="real-life-example">Real life example</h2>
-<p>For our example, we will create a <a href="https://github.com/sensiolabs/SensioGeneratorBundle/blob/8b7a33aa3d22388443b6de0b0cf184122e9f60d2/Manipulator/KernelManipulator.php"><code>KernelManipulator</code></a>
-similar to the one we can find in <a href="https://github.com/sensiolabs/SensioGeneratorBundle">SensioGeneratorBundle</a>.</p>
-<p>It takes a bundle's fully qualified classname and inserts it in the <code>AppKernel</code>
-file:</p>
+                        <h1 id="exceptions">Exceptions</h1>
+<p>All the exceptions thrown in Redaktilo live in the <code>Gnugat\Redaktilo\Exception</code>
+namespace and implement a common interface allowing you to catch any of them
+easily:</p>
 <pre><code class="language-php">&lt;?php
 
-namespace Sensio\Bundle\GeneratorBundle\Manipulator;
+try {
 
-use Gnugat\Redaktilo\Editor;
+    // any operations made with Redaktilo
 
-class KernelManipulator extends Manipulator
+} catch (\Gnugat\Redaktilo\Exception\Exception $e) { ... }</code></pre>
+<p>Redaktilo's exceptions all have a descriptive message allowing developers to
+understand what went wrong. If the message is not enough, use their getter
+to get more context.</p>
+<p>Here's the list of the exceptions that can be thrown:</p>
+<ul>
+<li><a href="#commandnotfoundexception">CommandNotFoundException</a></li>
+<li><a href="#notsupportedexception">NotSupportedException</a></li>
+<li><a href="#patternnotfoundexception">PatternNotFoundException</a></li>
+<li><a href="#invalidlinenumberexception">InvalidLineNumberException</a></li>
+<li><a href="#differentlinebreaksfoundexception">DifferentLineBreaksFoundException</a></li>
+<li><a href="#filenotfoundexception">FileNotFoundException</a></li>
+<li><a href="#ioexception">IOException</a></li>
+<li><a href="#invalidargumentexception">InvalidArgumentException</a></li>
+</ul>
+<h2 id="commandnotfoundexception">CommandNotFoundException</h2>
+<pre><code class="language-php">&lt;?php
+
+namespace Gnugat\Redaktilo\Exception;
+
+class CommandNotFoundException extends \Exception implements Exception
 {
-    protected $editor;
-    protected $appKernelFilename;
-
-    public function __construct(Editor $editor, $appKernelFilename)
-    {
-        $this-&gt;editor = $editor;
-        $this-&gt;appKernelFilename = $appKernelFilename;
-    }
-
-    public function addBundle($bundle)
-    {
-        $appKernel = $this-&gt;editor-&gt;open($this-&gt;appKernelFilename);
-        $newBundle = "            new $bundle(),";
-        if ($this-&gt;editor-&gt;hasBelow($appKernel, $newBundle)) {
-            $message = sprintf('Bundle "%s" is already defined in "AppKernel::registerBundles()".', $bundle);
-
-            throw new \RuntimeException($message);
-        }
-        $this-&gt;editor-&gt;jumpBelow($appKernel, '        );');
-        $this-&gt;editor-&gt;insertAbove($appKernel, $newBundle);
-        $this-&gt;editor-&gt;save($appKernel);
-
-        return true;
-    }
+    public function getName();
+    public function getCommands();
 }</code></pre>
-<p>As you can see it's easier to read and to understand than
-<a href="https://github.com/sensiolabs/SensioGeneratorBundle/blob/8b7a33aa3d22388443b6de0b0cf184122e9f60d2/Manipulator/KernelManipulator.php">the original PHP token parsing</a>.</p>
-<h2 id="further-documentation">Further documentation</h2>
-<p>You can see the current and past versions using one of the following:</p>
+<h2 id="notsupportedexception">NotSupportedException</h2>
+<pre><code class="language-php">&lt;?php
+
+namespace Gnugat\Redaktilo\Exception;
+
+class NotSupportedException extends \Exception implements Exception
+{
+    public function getPattern();
+    public function getSearchStrategies();
+}</code></pre>
+<h2 id="patternnotfoundexception">PatternNotFoundException</h2>
+<pre><code class="language-php">&lt;?php
+
+namespace Gnugat\Redaktilo\Exception;
+
+class PatternNotFoundException extends \Exception implements Exception
+{
+    public function getPattern();
+    public function getText();
+}</code></pre>
+<h2 id="invalidlinenumberexception">InvalidLineNumberException</h2>
+<pre><code class="language-php">&lt;?php
+
+namespace Gnugat\Redaktilo\Exception;
+
+class InvalidLineNumberException extends \InvalidArgumentException implements Exception
+{
+    public function getLineNumber();
+    public function getText();
+}</code></pre>
+<h2 id="differentlinebreaksfoundexception">DifferentLineBreaksFoundException</h2>
+<pre><code class="language-php">&lt;?php
+
+namespace Gnugat\Redaktilo\Exception;
+
+class DifferentLineBreaksFoundException extends \Exception implements Exception
+{
+    public function getString();
+    public function getNumberLineBreakOther();
+    public function getNumberLineBreakWindows();
+}</code></pre>
+<h2 id="filenotfoundexception">FileNotFoundException</h2>
+<pre><code class="language-php">&lt;?php
+
+namespace Gnugat\Redaktilo\Exception;
+
+class FileNotFoundException extends \RuntimeException implements Exception
+{
+    public function getPath();
+}</code></pre>
+<h2 id="ioexception">IOException</h2>
+<pre><code class="language-php">&lt;?php
+
+namespace Gnugat\Redaktilo\Exception;
+
+class IOException extends \RuntimeException implements Exception
+{
+    public function getPath();
+}</code></pre>
+<h2 id="invalidargumentexception">InvalidArgumentException</h2>
+<pre><code class="language-php">&lt;?php
+
+namespace Gnugat\Redaktilo\Exception;
+
+class InvalidArgumentException extends \InvalidArgumentException implements Exception
+{
+}</code></pre>
+<h2 id="previous-readings">Previous readings</h2>
 <ul>
-<li>the <code>git tag</code> command</li>
-<li>the <a href="https://github.com/gnugat/redaktilo/releases">releases page on Github</a></li>
-<li>the file listing the <a href="changelog.html">changes between versions</a></li>
-</ul>
-<p>You can find more documentation at the following links:</p>
-<ul>
-<li><a href="LICENSE">copyright and MIT license</a></li>
-<li><a href="versioning.html">versioning and branching models</a></li>
-<li><a href="contributing.html">contribution instructions</a></li>
-<li><a href="upgrade-2.0.html">migration to 2.0 instructions</a></li>
-</ul>
-<p>Next readings:</p>
-<ul>
-<li><a href="doc/01-tutorial.html">Tutorial</a></li>
-<li><a href="doc/02-use-cases.html">Use cases</a></li>
-<li><a href="doc/03-reference.html">Reference</a></li>
-<li><a href="doc/04-vocabulary.html">Vocabulary</a></li>
-<li><a href="doc/05-extending.html">Extending</a></li>
-<li><a href="doc/06-exceptions.html">Exceptions</a></li>
+<li><a href="../index.html">README</a></li>
+<li><a href="01-tutorial.html">Tutorial</a></li>
+<li><a href="02-use-cases.html">Use cases</a></li>
+<li><a href="03-reference.html">Reference</a></li>
+<li><a href="04-vocabulary.html">Vocabulary</a></li>
+<li><a href="05-extending.html">Extending</a></li>
 </ul>
                     </div>
 

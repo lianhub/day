@@ -1,6 +1,6 @@
 # Redaktilo
 
-v17-Redaktilo allows you to find, insert, replace and remove lines using an editor-like object.
+v18-Redaktilo allows you to find, insert, replace and remove lines using an editor-like object.
 
 *Because your code too needs an editor to manipulate files*.
 

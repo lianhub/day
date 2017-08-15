@@ -3,8 +3,8 @@
 This chapter shows you how to use Redaktilo and contains the following sections:
 
 * [The Editor](#the-editor)
-  + [Creating an Editor](#creating-an-editor)
-  - [Customizing the Editor](#customizing-the-editor)
+  * [[Creating an Editor]](#creating-an-editor)
+  * [Customizing the Editor](#customizing-the-editor)
 * [Editing Files](#editing-files)
  * [Navigating through the Content](#navigating-through-the-content)
  * [Manipulating a Line](#manipulating-a-line)
